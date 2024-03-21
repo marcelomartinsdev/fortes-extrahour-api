@@ -32,6 +32,7 @@ build/
 ### VS Code ###
 .vscode/
 
+application.properties
 
 ### DB Configuration ###
 /config/mongo

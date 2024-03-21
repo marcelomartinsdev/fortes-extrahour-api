@@ -1,4 +1,4 @@
-package com.example.fortesextrahourapi.domain.employee;
+package com.example.fortesextrahourapi.domain;
 
 public enum Cargo {
     FUNCIONARIO,

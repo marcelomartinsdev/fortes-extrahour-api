@@ -1,4 +1,4 @@
-package com.example.fortesextrahourapi.domain.employee;
+package com.example.fortesextrahourapi.domain;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -17,7 +17,6 @@ import java.time.LocalDate;
 public class Employee {
     @Id
     private String id;
-    private String matricula;
     @NotBlank(message = "O nome nao pode estar vazio!")
     private String nome;
     private Cargo cargo;
