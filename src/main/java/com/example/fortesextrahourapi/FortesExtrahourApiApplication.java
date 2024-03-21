@@ -11,5 +11,4 @@ public class FortesExtrahourApiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(FortesExtrahourApiApplication.class, args);
 	}
-
 }
