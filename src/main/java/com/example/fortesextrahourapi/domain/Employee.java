@@ -7,25 +7,80 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.List;
 
 @Document(collection = "employees")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Employee {
+public class Employee implements UserDetails {
+
     @Id
     private String id;
-    @NotBlank(message = "O nome nao pode estar vazio!")
-    private String nome;
-    private Cargo cargo;
-    @NotBlank(message = "O email nao pode estar vazio!")
+
+    @NotBlank(message = "O campo name nao pode estar vazio!")
+    private String name;
+
+    @NotBlank(message = "O campo username nao pode estar vazio!")
+    private String username;
+
+    private EmployeeRole role;
+
+    @NotBlank(message = "O campo email nao pode estar vazio!")
     private String email;
-    @NotBlank(message = "A senha nao pode estar vazia!")
-    @Length(min = 8, message = "A senha deve ter no minimo 8 caracteres!")
-    private String senha; // lembrar de criptografar
-    private String telefone;
-    private boolean ativo;
-    private LocalDate dataDeCadastro;
+
+    @NotBlank(message = "A password nao pode estar vazia!")
+    @Length(min = 8, message = "A password deve ter no minimo 8 caracteres!")
+    private String password; // lembrar de criptografar
+
+    private String cellphone;
+
+    private boolean active;
+
+    private LocalDate registrationDate;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        if (this.role == EmployeeRole.FUNCIONARIO) {
+            return List.of(new SimpleGrantedAuthority("ROLE_FUNCIONARIO"), new SimpleGrantedAuthority("ROLE_USER"));
+        } else if (this.role == EmployeeRole.GERENTE) {
+            return List.of(new SimpleGrantedAuthority("ROLE_GERENTE"), new SimpleGrantedAuthority("ROLE_USER"));
+        } else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+    }
+
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
