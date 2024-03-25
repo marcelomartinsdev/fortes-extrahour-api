@@ -27,6 +27,9 @@ public class Employee implements UserDetails {
     @NotBlank(message = "O campo name nao pode estar vazio!")
     private String name;
 
+    @NotBlank(message = "O campo username nao pode estar vazio!")
+    private String username;
+
     private EmployeeRole role;
 
     @NotBlank(message = "O campo email nao pode estar vazio!")
@@ -42,45 +45,42 @@ public class Employee implements UserDetails {
 
     private LocalDate registrationDate;
 
-    public Employee(String name, String password, EmployeeRole role) {
-        this.name = name;
-        this.password = password;
-        this.role = role;
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if(this.role == EmployeeRole.FUNCIONARIO) return List.of(new SimpleGrantedAuthority("ROLE_FUNCIONARIO"), new SimpleGrantedAuthority("ROLE_USER"));
-        else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        if (this.role == EmployeeRole.FUNCIONARIO) {
+            return List.of(new SimpleGrantedAuthority("ROLE_FUNCIONARIO"), new SimpleGrantedAuthority("ROLE_USER"));
+        } else if (this.role == EmployeeRole.GERENTE) {
+            return List.of(new SimpleGrantedAuthority("ROLE_GERENTE"), new SimpleGrantedAuthority("ROLE_USER"));
+        } else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override
     public String getPassword() {
-        return null;
+        return this.password;
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return this.username;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }
