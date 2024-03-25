@@ -16,32 +16,32 @@ import java.io.IOException;
 @Component
 public class TokenFilter extends OncePerRequestFilter {
     @Autowired
-    TokenService tokenService;
+    private TokenService tokenService;
 
     @Autowired
     private EmployeeRepository employeeRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String token;
+        var token = recoverToken(request);
 
-        var authorizationHeader = request.getHeader("Authorization");
+        if (token != null) {
+            var subject = tokenService.getSubject(token);
+            var usuario = employeeRepository.findByUsername(subject);
 
-        if (authorizationHeader != null) {
-            token = authorizationHeader.replace("Bearer ", "");
-            var subject = this.tokenService.getSubject(token);
-
-            if (subject != null) {
-                var employee = this.employeeRepository.findEmployeeByName(subject);
-
-                if (employee != null) {
-                    var authentication = new UsernamePasswordAuthenticationToken(employee, null, employee.getAuthorities());
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                }
-            }
+            var authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request, response);
     }
+
+    private String recoverToken(HttpServletRequest request) {
+        var authorizationHeader = request.getHeader("Authorization");
+        if (authorizationHeader != null) {
+            return authorizationHeader.replace("Bearer ", "");
+        }
+        return null;
+}
 
 
 

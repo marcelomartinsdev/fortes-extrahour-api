@@ -7,7 +7,9 @@ import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.example.fortesextrahourapi.domain.Employee;
 import com.example.fortesextrahourapi.exceptions.CustomTokenCreationException;
 import com.example.fortesextrahourapi.exceptions.CustomTokenValidationException;
+import com.example.fortesextrahourapi.exceptions.FortesException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -22,7 +24,11 @@ public class TokenService {
 
     public String generateToken(Employee employee) {
         try {
-            return JWT.create().withIssuer("ExtraHoursAPI").withSubject(employee.getName()).withClaim("id", employee.getId()).withExpiresAt(new Date(System.currentTimeMillis() + expirationTime)).sign(Algorithm.HMAC256(secret));
+            return JWT.create().withIssuer("ExtraHoursAPI")
+                    .withSubject(employee.getUsername())
+                    .withClaim("id", employee.getId())
+                    .withExpiresAt(new Date(System.currentTimeMillis() + expirationTime))
+                    .sign(Algorithm.HMAC256(secret));
         } catch (JWTCreationException e) {
             throw new CustomTokenCreationException("Falha ao criar o Token!", e);
         }
@@ -39,9 +45,13 @@ public class TokenService {
                 return null;
             }
 
-            return JWT.require(Algorithm.HMAC256("${jwt.secret}")).withIssuer("ExtraHoursAPI").build().verify(token).getSubject();
+            return JWT.require(Algorithm.HMAC256("${jwt.secret}"))
+                    .withIssuer("ExtraHoursAPI")
+                    .build()
+                    .verify(token)
+                    .getSubject();
         } catch (JWTCreationException e) {
-            throw new CustomTokenValidationException("Falha ao validar o Token!", e);
+            throw new FortesException("Erro ao capturar assunto do token!", HttpStatus.NOT_FOUND);
         }
     }
 
