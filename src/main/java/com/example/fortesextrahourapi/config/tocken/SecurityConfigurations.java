@@ -28,7 +28,7 @@ public class SecurityConfigurations {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeHttpRequests()
                 .requestMatchers(HttpMethod.POST, "/token").permitAll()
-                //.antMatchers(HttpMethod.POST, "/api/employees").permitAll()
+//                .requestMatchers(HttpMethod.POST, "/api/employees").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/employees").hasRole("GERENTE")
                 .anyRequest().authenticated()
                 .and().addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class)
