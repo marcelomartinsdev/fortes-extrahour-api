@@ -30,6 +30,8 @@ public class SecurityConfigurations {
                 .requestMatchers(HttpMethod.POST, "/token").permitAll()
 //                .requestMatchers(HttpMethod.POST, "/api/employees").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/employees").hasRole("GERENTE")
+                .requestMatchers(HttpMethod.GET, "/api/employees").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/employees/all").permitAll()
                 .anyRequest().authenticated()
                 .and().addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

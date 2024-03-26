@@ -3,7 +3,7 @@ package com.example.fortesextrahourapi.domain;
 import lombok.Getter;
 
 @Getter
-public enum EmployeeRole {
+public enum RoleEnum {
     FUNCIONARIO("FUNCIONARIO"),
     ENCARREGADO("ENCARREGADO"),
     TECNICO("TECNICO"),
@@ -13,7 +13,11 @@ public enum EmployeeRole {
 
     private final String role;
 
-    EmployeeRole(String role) {
+    RoleEnum(String role) {
         this.role = role;
+    }
+
+    public static RoleEnum getRoleEnum(String role) {
+        return RoleEnum.valueOf(role);
     }
 }
