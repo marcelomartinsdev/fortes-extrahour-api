@@ -30,14 +30,14 @@ public class Employee implements UserDetails {
     @NotBlank(message = "O campo username nao pode estar vazio!")
     private String username;
 
-    private EmployeeRole role;
+    private RoleEnum role;
 
     @NotBlank(message = "O campo email nao pode estar vazio!")
     private String email;
 
     @NotBlank(message = "A password nao pode estar vazia!")
     @Length(min = 8, message = "A password deve ter no minimo 8 caracteres!")
-    private String password; // lembrar de criptografar
+    private String password;
 
     private String cellphone;
 
@@ -49,9 +49,9 @@ public class Employee implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (this.role == EmployeeRole.FUNCIONARIO) {
+        if (this.role == RoleEnum.FUNCIONARIO) {
             return List.of(new SimpleGrantedAuthority("ROLE_FUNCIONARIO"), new SimpleGrantedAuthority("ROLE_USER"));
-        } else if (this.role == EmployeeRole.GERENTE) {
+        } else if (this.role == RoleEnum.GERENTE) {
             return List.of(new SimpleGrantedAuthority("ROLE_GERENTE"), new SimpleGrantedAuthority("ROLE_USER"));
         } else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
