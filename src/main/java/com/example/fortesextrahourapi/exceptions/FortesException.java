@@ -23,6 +23,7 @@ public class FortesException extends RuntimeException {
         add("mensagem", descricao);
     }
 
+
     public HttpStatus getStatus() {
         return this.status;
     }
