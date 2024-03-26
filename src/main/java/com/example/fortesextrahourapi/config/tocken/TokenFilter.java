@@ -25,6 +25,7 @@ public class TokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         var token = recoverToken(request);
 
+        System.out.println(token);
         if (token != null) {
             var subject = tokenService.getSubject(token);
             var usuario = employeeRepository.findByUsername(subject);

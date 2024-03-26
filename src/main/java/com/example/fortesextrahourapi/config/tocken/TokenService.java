@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.example.fortesextrahourapi.domain.Employee;
 import com.example.fortesextrahourapi.exceptions.CustomTokenCreationException;
 import com.example.fortesextrahourapi.exceptions.CustomTokenValidationException;
@@ -34,36 +35,28 @@ public class TokenService {
         }
     }
 
-    public String getSubject(String token) {
+    public String getSubject(String tokenJWT) {
         try {
-            //verificar se o token não é nulo ou vazio
-            if (token == null || token.isEmpty()) {
-                return null;
-            }
-            //verificar se o token está expirado
-            if (isTokenExpired(token)) {
-                return null;
-            }
-
-            return JWT.require(Algorithm.HMAC256("${jwt.secret}"))
+            var algoritmo = Algorithm.HMAC256(secret);
+            return JWT.require(algoritmo)
                     .withIssuer("ExtraHoursAPI")
                     .build()
-                    .verify(token)
+                    .verify(tokenJWT)
                     .getSubject();
-        } catch (JWTCreationException e) {
-            throw new FortesException("Erro ao capturar assunto do token!", HttpStatus.NOT_FOUND);
+        } catch (JWTVerificationException exception) {
+            throw new RuntimeException("Token JWT inválido ou expirado!");
         }
     }
 
-    public boolean isTokenExpired(String token) {
-        try {
-            //captura a data de expiração do token
-            Date expiration = JWT.decode(token).getExpiresAt();
+        public boolean isTokenExpired (String token){
+            try {
+                //captura a data de expiração do token
+                Date expiration = JWT.decode(token).getExpiresAt();
 
-            //se a data de expiração do token for anterior a data atual, ira cair no erro
-            return expiration != null && expiration.before(Date.from(Instant.now()));
-        } catch (JWTDecodeException e) {
-            return true; // se o token estiver expirado, retorna true, está expirado
+                //se a data de expiração do token for anterior a data atual, ira cair no erro
+                return expiration != null && expiration.before(Date.from(Instant.now()));
+            } catch (JWTDecodeException e) {
+                return true; // se o token estiver expirado, retorna true, está expirado
+            }
         }
     }
-}
