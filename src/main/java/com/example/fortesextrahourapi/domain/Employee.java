@@ -1,5 +1,6 @@
 package com.example.fortesextrahourapi.domain;
 
+import com.example.fortesextrahourapi.enums.RoleEnum;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -53,7 +54,10 @@ public class Employee implements UserDetails {
             return List.of(new SimpleGrantedAuthority("ROLE_FUNCIONARIO"), new SimpleGrantedAuthority("ROLE_USER"));
         } else if (this.role == RoleEnum.GERENTE) {
             return List.of(new SimpleGrantedAuthority("ROLE_GERENTE"), new SimpleGrantedAuthority("ROLE_USER"));
-        } else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        } else if (this.role == RoleEnum.ENCARREGADO) {
+            return List.of(new SimpleGrantedAuthority("ROLE_ENCARREGADO"), new SimpleGrantedAuthority("ROLE_USER"));
+        }
+            else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override
