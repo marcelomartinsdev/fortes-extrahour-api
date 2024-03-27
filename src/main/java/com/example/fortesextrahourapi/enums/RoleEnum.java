@@ -1,4 +1,4 @@
-package com.example.fortesextrahourapi.domain;
+package com.example.fortesextrahourapi.enums;
 
 import lombok.Getter;
 

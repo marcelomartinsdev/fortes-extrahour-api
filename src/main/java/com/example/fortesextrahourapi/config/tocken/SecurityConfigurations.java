@@ -32,6 +32,7 @@ public class SecurityConfigurations {
                 .requestMatchers(HttpMethod.POST, "/api/employees").hasRole("GERENTE")
                 .requestMatchers(HttpMethod.GET, "/api/employees").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/employees/all").permitAll()
+                .requestMatchers(HttpMethod.POST, "/extrahours").hasRole("ENCARREGADO")
                 .anyRequest().authenticated()
                 .and().addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

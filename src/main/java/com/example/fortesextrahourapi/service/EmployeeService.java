@@ -1,7 +1,7 @@
 package com.example.fortesextrahourapi.service;
 
 import com.example.fortesextrahourapi.domain.Employee;
-import com.example.fortesextrahourapi.domain.RoleEnum;
+import com.example.fortesextrahourapi.enums.RoleEnum;
 import com.example.fortesextrahourapi.dto.ShowEmployeeNameDTO;
 import com.example.fortesextrahourapi.exceptions.FortesException;
 import com.example.fortesextrahourapi.repositories.AddressRepository;
