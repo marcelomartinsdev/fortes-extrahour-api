@@ -1,7 +1,6 @@
 package com.example.fortesextrahourapi.dto;
 
-import com.example.fortesextrahourapi.domain.RoleEnum;
-import jakarta.validation.constraints.NotBlank;
+import com.example.fortesextrahourapi.enums.RoleEnum;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

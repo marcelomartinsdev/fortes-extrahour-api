@@ -2,15 +2,12 @@ package com.example.fortesextrahourapi.controller;
 
 
 import com.example.fortesextrahourapi.domain.Employee;
-import com.example.fortesextrahourapi.domain.RoleEnum;
+import com.example.fortesextrahourapi.enums.RoleEnum;
 import com.example.fortesextrahourapi.dto.BaseResponseDTO;
-import com.example.fortesextrahourapi.repositories.EmployeeRepository;
 import com.example.fortesextrahourapi.service.EmployeeService;
 import jakarta.validation.Valid;
-import jakarta.validation.executable.ValidateOnExecution;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

@@ -1,7 +1,7 @@
 package com.example.fortesextrahourapi.repositories;
 
 import com.example.fortesextrahourapi.domain.Employee;
-import com.example.fortesextrahourapi.domain.RoleEnum;
+import com.example.fortesextrahourapi.enums.RoleEnum;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
