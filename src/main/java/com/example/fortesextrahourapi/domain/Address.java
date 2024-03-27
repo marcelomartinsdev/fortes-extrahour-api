@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 public class Address {
     @Id
-    private Long id;
+    private String id;
 
     private String city;
 
