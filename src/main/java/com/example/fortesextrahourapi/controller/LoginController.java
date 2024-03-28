@@ -13,7 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/token")
+@RequestMapping("/api/login")
 public class LoginController extends BaseController {
 
 
