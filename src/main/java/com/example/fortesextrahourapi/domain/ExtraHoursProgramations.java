@@ -3,7 +3,6 @@ package com.example.fortesextrahourapi.domain;
 import com.example.fortesextrahourapi.enums.ExtraHoursProgramationStatusEnum;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

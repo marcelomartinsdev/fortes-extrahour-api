@@ -48,16 +48,18 @@ public class Employee implements UserDetails {
 
     private List<Address> addresses;
 
+    private static final String ROLE_USER = "ROLE_USER";
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+
         if (this.role == RoleEnum.FUNCIONARIO) {
-            return List.of(new SimpleGrantedAuthority("ROLE_FUNCIONARIO"), new SimpleGrantedAuthority("ROLE_USER"));
+            return List.of(new SimpleGrantedAuthority("ROLE_FUNCIONARIO"), new SimpleGrantedAuthority(ROLE_USER));
         } else if (this.role == RoleEnum.GERENTE) {
-            return List.of(new SimpleGrantedAuthority("ROLE_GERENTE"), new SimpleGrantedAuthority("ROLE_USER"));
+            return List.of(new SimpleGrantedAuthority("ROLE_GERENTE"), new SimpleGrantedAuthority(ROLE_USER));
         } else if (this.role == RoleEnum.ENCARREGADO) {
-            return List.of(new SimpleGrantedAuthority("ROLE_ENCARREGADO"), new SimpleGrantedAuthority("ROLE_USER"));
+            return List.of(new SimpleGrantedAuthority("ROLE_ENCARREGADO"), new SimpleGrantedAuthority(ROLE_USER));
         }
-            else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+            else return List.of(new SimpleGrantedAuthority(ROLE_USER));
     }
 
     @Override
