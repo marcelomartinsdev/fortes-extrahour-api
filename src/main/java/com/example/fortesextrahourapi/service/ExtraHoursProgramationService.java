@@ -2,12 +2,18 @@ package com.example.fortesextrahourapi.service;
 
 import com.example.fortesextrahourapi.domain.ExtraHoursProgramations;
 import com.example.fortesextrahourapi.dto.RequestExtraHoursProgramationDTO;
+import com.example.fortesextrahourapi.dto.RequestStatusExtraHoursProgramationDTO;
 import com.example.fortesextrahourapi.dto.ResponseExtraHoursProgramationDTO;
+import com.example.fortesextrahourapi.enums.ExtraHoursProgramationStatusEnum;
 import com.example.fortesextrahourapi.enums.RoleEnum;
 import com.example.fortesextrahourapi.enums.UnitEnum;
+import com.example.fortesextrahourapi.exceptions.FortesException;
 import com.example.fortesextrahourapi.repositories.ExtraHoursRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class ExtraHoursProgramationService {
@@ -18,7 +24,7 @@ public class ExtraHoursProgramationService {
     private EmployeeService employeeService;
 
     public String registerExtraHoursProgramation(RequestExtraHoursProgramationDTO dto) {
-        ExtraHoursProgramations responseExtraHours = extraHoursRepository.save(buildExtraHoursProgramations(dto));
+        extraHoursRepository.save(buildExtraHoursProgramations(dto));
         return "Sucesso!";
     }
 
@@ -42,5 +48,15 @@ public class ExtraHoursProgramationService {
         response.setGestor(employeeService.showEmployees(RoleEnum.GESTOR));
         response.setUnits(UnitEnum.getUnitsDescription());
         return response;
+    }
+
+    public String changeStatusExtraHoursProgramation(RequestStatusExtraHoursProgramationDTO dto) {
+        Optional<ExtraHoursProgramations> optionalExtraHoursProgramations = extraHoursRepository.findById(dto.getProgramationId());
+        if(optionalExtraHoursProgramations.isPresent()){
+            optionalExtraHoursProgramations.get().setStatus(dto.getStatus());
+            extraHoursRepository.save(optionalExtraHoursProgramations.get());
+            return "Sucesso!";
+        }
+        throw new FortesException("Programacao nao encontrada!", HttpStatus.NOT_FOUND);
     }
 }
