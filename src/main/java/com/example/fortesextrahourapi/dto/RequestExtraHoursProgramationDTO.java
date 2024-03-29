@@ -1,11 +1,8 @@
 package com.example.fortesextrahourapi.dto;
 
-import com.example.fortesextrahourapi.domain.Employee;
-import com.example.fortesextrahourapi.enums.ExtraHoursProgramationStatusEnum;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
