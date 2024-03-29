@@ -7,7 +7,6 @@ import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.example.fortesextrahourapi.domain.Employee;
 import com.example.fortesextrahourapi.exceptions.CustomTokenCreationException;
-import com.example.fortesextrahourapi.exceptions.CustomTokenValidationException;
 import com.example.fortesextrahourapi.exceptions.FortesException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -31,7 +30,7 @@ public class TokenService {
                     .withExpiresAt(new Date(System.currentTimeMillis() + expirationTime))
                     .sign(Algorithm.HMAC256(secret));
         } catch (JWTCreationException e) {
-            throw new CustomTokenCreationException("Falha ao criar o Token!", e);
+            throw new FortesException("Falha ao criar o Token!", HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -44,7 +43,7 @@ public class TokenService {
                     .verify(tokenJWT)
                     .getSubject();
         } catch (JWTVerificationException exception) {
-            throw new RuntimeException("Token JWT inválido ou expirado!");
+            throw new FortesException("Token JWT inválido ou expirado!", HttpStatus.BAD_REQUEST);
         }
     }
 

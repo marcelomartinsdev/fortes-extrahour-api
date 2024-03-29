@@ -7,7 +7,6 @@ import com.example.fortesextrahourapi.enums.RoleEnum;
 import com.example.fortesextrahourapi.enums.UnitEnum;
 import com.example.fortesextrahourapi.repositories.ExtraHoursRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
