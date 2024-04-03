@@ -46,8 +46,6 @@ public class Employee implements UserDetails {
 
     private LocalDate registrationDate;
 
-    private List<Address> addresses;
-
     private static final String ROLE_USER = "ROLE_USER";
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

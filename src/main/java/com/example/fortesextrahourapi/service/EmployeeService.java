@@ -1,10 +1,10 @@
 package com.example.fortesextrahourapi.service;
 
 import com.example.fortesextrahourapi.domain.Employee;
+import com.example.fortesextrahourapi.dto.RequestCreateEmployeeDTO;
 import com.example.fortesextrahourapi.enums.RoleEnum;
 import com.example.fortesextrahourapi.dto.ShowEmployeeNameDTO;
 import com.example.fortesextrahourapi.exceptions.FortesException;
-import com.example.fortesextrahourapi.repositories.AddressRepository;
 import com.example.fortesextrahourapi.repositories.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,11 +19,8 @@ public class EmployeeService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
-    @Autowired
-    private AddressRepository addressRepository;
-
-    public Employee createEmployee(Employee employee) {
-        addressRepository.saveAll(addressRepository.saveAll(employee.getAddresses()));
+    public String createEmployee(RequestCreateEmployeeDTO dto) {
+        Employee employee = toEmployee(dto);
         if (employeeRepository.existsEmployeeByUsername(employee.getUsername())) {
             throw new FortesException("Nome de usuário já cadastrado!", HttpStatus.CONFLICT);
         }
@@ -33,7 +30,21 @@ public class EmployeeService {
         }
 
         employee.setPassword(cryptoPassword(employee.getPassword()));
-        return employeeRepository.save(employee);
+        employeeRepository.save(employee);
+        return "Sucesso!";
+    }
+
+    private Employee toEmployee(RequestCreateEmployeeDTO dto) {
+        Employee employee = new Employee();
+        employee.setCellphone(dto.getCellphone());
+        employee.setActive(true);
+        employee.setEmail(dto.getEmail());
+        employee.setName(dto.getName());
+        employee.setUsername(dto.getUsername());
+        employee.setPassword(dto.getPassword());
+        employee.setRole(dto.getRole());
+        employee.setRegistrationDate(dto.getRegistrationDate());
+        return employee;
     }
 
     private String cryptoPassword(String senha) {
