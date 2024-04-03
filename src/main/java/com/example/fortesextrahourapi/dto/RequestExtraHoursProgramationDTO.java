@@ -11,6 +11,8 @@ import java.util.List;
 @Getter
 @Setter
 public class RequestExtraHoursProgramationDTO {
+    private String id;
+
     @NotBlank(message = "A data nao pode estar vazia!")
     private LocalDate programationDate;
 
@@ -32,3 +34,4 @@ public class RequestExtraHoursProgramationDTO {
     @NotBlank(message = "O horario de termino nao pode estar vazio")
     private LocalTime endTime;
 }
+

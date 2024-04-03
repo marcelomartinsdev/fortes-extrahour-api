@@ -2,6 +2,7 @@ package com.example.fortesextrahourapi.controller;
 
 
 import com.example.fortesextrahourapi.domain.Employee;
+import com.example.fortesextrahourapi.dto.RequestCreateEmployeeDTO;
 import com.example.fortesextrahourapi.enums.RoleEnum;
 import com.example.fortesextrahourapi.dto.BaseResponseDTO;
 import com.example.fortesextrahourapi.service.EmployeeService;
@@ -17,8 +18,8 @@ public class EmployeeController extends BaseController {
     private EmployeeService employeeService;
 
     @PostMapping
-    public ResponseEntity<BaseResponseDTO> insertEmployee(@RequestBody @Valid Employee employee) {
-        return ok(employeeService.createEmployee(employee));
+    public ResponseEntity<BaseResponseDTO> insertEmployee(@RequestBody @Valid RequestCreateEmployeeDTO employeeDTO) {
+        return ok(employeeService.createEmployee(employeeDTO));
     }
 
     @GetMapping
