@@ -35,6 +35,8 @@ public class SecurityConfigurations {
                 .requestMatchers(HttpMethod.POST, "/api/extrahours").hasRole("ENCARREGADO")
                 .requestMatchers(HttpMethod.GET, "/api/extrahours").hasRole("ENCARREGADO")
                 .requestMatchers(HttpMethod.PATCH, "/api/extrahours").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/extrahours/all").permitAll()
+                .requestMatchers(HttpMethod.PUT, "/api/extrahours/edit").permitAll()
                 .anyRequest().authenticated()
                 .and().addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
