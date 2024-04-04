@@ -24,7 +24,7 @@ public class SecurityConfigurations {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.csrf().disable()
+        return http.cors().and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeHttpRequests()
                 .requestMatchers(HttpMethod.POST, "/api/login").permitAll()
@@ -37,6 +37,7 @@ public class SecurityConfigurations {
                 .requestMatchers(HttpMethod.PATCH, "/api/extrahours").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/extrahours/all").permitAll()
                 .requestMatchers(HttpMethod.PUT, "/api/extrahours/edit").permitAll()
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .anyRequest().authenticated()
                 .and().addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
