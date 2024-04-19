@@ -30,5 +30,5 @@ public class RequestCreateEmployeeDTO {
 
     private boolean active;
 
-    private LocalDate registrationDate;
+    private String registrationDate;
 }

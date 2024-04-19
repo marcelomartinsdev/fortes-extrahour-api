@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,8 +21,11 @@ public class EmployeeService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
     public String createEmployee(RequestCreateEmployeeDTO dto) {
         Employee employee = toEmployee(dto);
+        employee.setRegistrationDate(dateFormatter());
         if (employeeRepository.existsEmployeeByUsername(employee.getUsername())) {
             throw new FortesException("Nome de usuário já cadastrado!", HttpStatus.CONFLICT);
         }
@@ -43,8 +48,12 @@ public class EmployeeService {
         employee.setUsername(dto.getUsername());
         employee.setPassword(dto.getPassword());
         employee.setRole(dto.getRole());
-        employee.setRegistrationDate(dto.getRegistrationDate());
         return employee;
+    }
+
+    private String dateFormatter() {
+        LocalDate date = LocalDate.now();
+        return date.format(dateTimeFormatter);
     }
 
     private String cryptoPassword(String senha) {
@@ -53,22 +62,15 @@ public class EmployeeService {
 
     public List<ShowEmployeeNameDTO> showEmployees(RoleEnum employeeRole) {
         List<Employee> roles = employeeRepository.findAllByRole(employeeRole);
-        List<ShowEmployeeNameDTO> responseShowEmployeeDTO = new ArrayList<>();
-        if (roles.isEmpty()) {
-            throw new FortesException("Não há nenhum funcionário cadastrado com este cargo: " + employeeRole.getRole(), HttpStatus.CONFLICT);
-        }
-        roles.forEach(e -> {
-            ShowEmployeeNameDTO dto = new ShowEmployeeNameDTO();
-            dto.setName(e.getName());
-            dto.setUsername(e.getUsername());
-            dto.setRole(e.getRole());
-            responseShowEmployeeDTO.add(dto);
-        });
-        return responseShowEmployeeDTO;
+        return getShowEmployeeNameDTOS(roles);
     }
 
     public List<ShowEmployeeNameDTO> showAllEmployees() {
         List<Employee> roles = employeeRepository.findAll();
+        return getShowEmployeeNameDTOS(roles);
+    }
+
+    private List<ShowEmployeeNameDTO> getShowEmployeeNameDTOS(List<Employee> roles) {
         List<ShowEmployeeNameDTO> responseShowEmployeeDTO = new ArrayList<>();
         if (roles.isEmpty()) {
             throw new FortesException("Não há nenhum funcionário cadastrado", HttpStatus.CONFLICT);
