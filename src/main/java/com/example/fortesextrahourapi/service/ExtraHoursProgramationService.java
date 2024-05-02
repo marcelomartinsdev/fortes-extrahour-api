@@ -22,17 +22,17 @@ public class ExtraHoursProgramationService {
     @Autowired
     private EmployeeService employeeService;
 
-    public String registerExtraHoursProgramation(RequestExtraHoursProgramationDTO dto) {
-        if(dto.getId() == null){
-            extraHoursRepository.save(buildExtraHoursProgramations(dto));
-            return "Sucesso!";
-        }
-        ExtraHoursProgramations extraHoursProgramations = extraHoursRepository.findById(dto.getId()).get();
-        validationExtraHourProgramation(extraHoursProgramations);
+    private static final String SUCESSO = "Sucesso!";
+
+    public String registerOrEditExtraHoursProgramation(RequestExtraHoursProgramationDTO dto, boolean editExtraHours) {
+        ExtraHoursProgramations extraHoursProgramations;
         extraHoursProgramations = buildExtraHoursProgramations(dto);
-        extraHoursProgramations.setId(dto.getId());
+        if (editExtraHours) {
+            validationExtraHourProgramation(dto.getId());
+            extraHoursProgramations.setId(dto.getId());
+        }
         extraHoursRepository.save(extraHoursProgramations);
-        return "Sucesso!";
+        return SUCESSO;
     }
 
     private ExtraHoursProgramations buildExtraHoursProgramations(RequestExtraHoursProgramationDTO dto) {
@@ -41,6 +41,7 @@ public class ExtraHoursProgramationService {
         extraHoursProgramations.setGestor(dto.getGestor());
         extraHoursProgramations.setTecnico(dto.getTecnico());
         extraHoursProgramations.setReason(dto.getReason());
+
         return extraHoursProgramations;
     }
 
@@ -56,10 +57,10 @@ public class ExtraHoursProgramationService {
 
     public String changeStatusExtraHoursProgramation(RequestStatusExtraHoursProgramationDTO dto) {
         Optional<ExtraHoursProgramations> optionalExtraHoursProgramations = extraHoursRepository.findById(dto.getProgramationId());
-        if(optionalExtraHoursProgramations.isPresent()){
+        if (optionalExtraHoursProgramations.isPresent()) {
             optionalExtraHoursProgramations.get().setStatus(dto.getStatus());
             extraHoursRepository.save(optionalExtraHoursProgramations.get());
-            return "Sucesso!";
+            return SUCESSO;
         }
         throw new FortesException("Programação não encontrada!", HttpStatus.NOT_FOUND);
     }
@@ -88,8 +89,8 @@ public class ExtraHoursProgramationService {
 
     public ResponseViewExtraHourProgramationDTO responseViewExtraHourProgramationDTO(String id) {
         ResponseViewExtraHourProgramationDTO response = new ResponseViewExtraHourProgramationDTO();
+        validationExtraHourProgramation(id);
         ExtraHoursProgramations extraHoursProgramations = extraHoursRepository.findById(id).get();
-        validationExtraHourProgramation(extraHoursProgramations);
         response.setId(extraHoursProgramations.getId());
         response.setProgramationDate(extraHoursProgramations.getProgramationDate());
         response.setStartTime(extraHoursProgramations.getStartTime());
@@ -102,9 +103,8 @@ public class ExtraHoursProgramationService {
         return response;
     }
 
-    private void validationExtraHourProgramation(ExtraHoursProgramations extraHoursProgramations){
-        if (extraHoursProgramations == null) {
-            throw new FortesException("ID não encontrado!", HttpStatus.NOT_FOUND);
-        }
+    private void validationExtraHourProgramation(String id) {
+        extraHoursRepository.findById(id)
+                .orElseThrow(() -> new FortesException("Entidade não encontrada para o ID: " + id, HttpStatus.NOT_FOUND));
     }
 }

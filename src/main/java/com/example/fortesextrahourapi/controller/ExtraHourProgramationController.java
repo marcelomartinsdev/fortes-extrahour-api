@@ -16,7 +16,7 @@ public class ExtraHourProgramationController extends BaseController {
 
     @PostMapping
     public ResponseEntity<BaseResponseDTO> registerExtraHourProgramation(@RequestBody RequestExtraHoursProgramationDTO dto) {
-        return ok(extraHoursProgramationService.registerExtraHoursProgramation(dto));
+        return ok(extraHoursProgramationService.registerOrEditExtraHoursProgramation(dto, Boolean.FALSE));
     }
 
     @GetMapping
@@ -41,6 +41,6 @@ public class ExtraHourProgramationController extends BaseController {
 
     @PutMapping("/edit")
     public ResponseEntity<BaseResponseDTO> editExtraHourProgramation(@RequestBody RequestExtraHoursProgramationDTO dto) {
-        return ok(extraHoursProgramationService.registerExtraHoursProgramation(dto));
+        return ok(extraHoursProgramationService.registerOrEditExtraHoursProgramation(dto, Boolean.TRUE));
     }
 }
