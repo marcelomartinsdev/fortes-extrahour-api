@@ -82,6 +82,11 @@
             <artifactId>spring-security-config</artifactId>
             <version>6.0.8</version>
         </dependency>
+        <dependency>
+            <groupId>org.junit</groupId>
+            <artifactId>junit5-engine</artifactId>
+            <version>5.0.0-ALPHA</version>
+        </dependency>
     </dependencies>
 
     <build>

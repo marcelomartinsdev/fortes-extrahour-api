@@ -12,7 +12,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
@@ -44,9 +43,7 @@ public class Employee implements UserDetails {
 
     private boolean active;
 
-    private LocalDate registrationDate;
-
-    private List<Address> addresses;
+    private String registrationDate;
 
     private static final String ROLE_USER = "ROLE_USER";
     @Override

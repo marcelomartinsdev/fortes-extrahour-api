@@ -16,7 +16,7 @@ public class ExtraHourProgramationController extends BaseController {
 
     @PostMapping
     public ResponseEntity<BaseResponseDTO> registerExtraHourProgramation(@RequestBody RequestExtraHoursProgramationDTO dto) {
-        return ok(extraHoursProgramationService.registerExtraHoursProgramation(dto));
+        return ok(extraHoursProgramationService.registerOrEditExtraHoursProgramation(dto, Boolean.FALSE));
     }
 
     @GetMapping
@@ -24,8 +24,23 @@ public class ExtraHourProgramationController extends BaseController {
         return ok(extraHoursProgramationService.getResponseExtraHoursProgramationDTO());
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<BaseResponseDTO> getExtraHourProgramationList() {
+        return ok(extraHoursProgramationService.responseListExtraHoursProgramationDTO());
+    }
+
+    @GetMapping("/id")
+    public ResponseEntity<BaseResponseDTO> getExtraHourProgramationById(@RequestParam String id) {
+        return ok(extraHoursProgramationService.responseViewExtraHourProgramationDTO(id));
+    }
+
     @PatchMapping
     public ResponseEntity<BaseResponseDTO> changeStatusExtraHourProgramation(@RequestBody RequestStatusExtraHoursProgramationDTO dto) {
         return ok(extraHoursProgramationService.changeStatusExtraHoursProgramation(dto));
+    }
+
+    @PutMapping("/edit")
+    public ResponseEntity<BaseResponseDTO> editExtraHourProgramation(@RequestBody RequestExtraHoursProgramationDTO dto) {
+        return ok(extraHoursProgramationService.registerOrEditExtraHoursProgramation(dto, Boolean.TRUE));
     }
 }
