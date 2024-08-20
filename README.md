@@ -31,7 +31,7 @@ This repository contains the RESTful API developed as part of my Final Graduatio
 
 ### Prerequisites
 
-- Java 11
+- Java 17
 - Maven
 - MongoDB
 
