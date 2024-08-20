@@ -23,7 +23,7 @@ You can view the live project online at [https://fortes-khaki.vercel.app/](https
 
 ## Technologies
 
-- **Java 11**
+- **Java 17**
 - **Spring Boot**
 - **Spring Security**
 - **MongoDB**
