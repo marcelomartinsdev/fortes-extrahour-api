@@ -1,163 +1,118 @@
-# Dia 01 - 19/03/24
+# Fortes Extra Hour API
 
-### Iniciando o Backend da Aplicação
+This repository contains the RESTful API developed as part of my Final Graduation Project (TCC) in partnership with Fortes Engenharia. The API is designed to manage overtime work for construction projects, allowing users to schedule overtime, assign employees, choose responsible managers, and log reasons for overtime requests. The project was implemented using Java, Spring Boot, and MongoDB.
 
-**Criado o projeto Spring utilizando o Spring Initializr com as seguintes dependências:**
+## Table of Contents
 
-1. **Spring Web**: Essencial para construir sua API RESTful, permitindo a criação de controladores, mapeamento de rotas e tratamento de requisições/respostas HTTP.
-2. **Spring Data MongoDB**: Facilita a interação com o MongoDB, oferecendo abstrações para realizar operações CRUD, além de consultas personalizadas, sem a necessidade de escrever muito código boilerplate.
-3. **Spring Security**: Fornece funcionalidades de autenticação e autorização. É altamente configurável e se integrará bem ao gerenciar diferentes níveis de acesso entre os atores do seu sistema (Encarregado, Técnico, Gestor, etc.).
-    1. Adicionato também as depêndencias necessárias para realizar a autenticação com Tokens JWT `spring-security-config | jakarta.validation-api | java-jwt`
-4. **Spring Boot DevTools**: Oferece recursos como recarregamento automático de aplicações e configurações de desenvolvimento, facilitando o processo de desenvolvimento.
-5. **Lombok**: Reduz o boilerplate em seu código Java, automatizando a geração de getters, setters, métodos equals, hashCode e toString com simples anotações.
-6. **Validation**: Suporte à validação de beans, útil para garantir que os dados recebidos nas suas APIs atendam a determinados critérios antes de serem processados ou persistidos.
+- [Features](#features)
+- [Technologies](#technologies)
+- [Installation](#installation)
+- [Usage](#usage)
+- [API Endpoints](#api-endpoints)
+- [Project Structure](#project-structure)
+- [License](#license)
 
-Feito configuração inicial do banco de dados MongoDB a partir do MongoDBCompass
+## Features
 
-Criado primeiro banco de dados com o nome “extra-hours-management”
+- **User Authentication and Security:** Implemented using JSON Web Tokens (JWT) with Spring Security.
+- **Database Management:** Uses MongoDB for flexible and scalable data storage.
+- **Unit Testing:** Comprehensive unit tests using JUnit to ensure the reliability of core functionalities.
+- **CORS Configuration:** Configured to allow smooth communication between the frontend and backend.
 
-Criado primeira collection com o nome “employees”
+## Technologies
 
-Configuração Inicial:
+- **Java 11**
+- **Spring Boot**
+- **Spring Security**
+- **MongoDB**
+- **JUnit**
 
-- Criado o package config.mongo
-- Feito a configuração Inicial da classe “MongoDBConfig”
+## Installation
 
-```java
-package com.example.fortesextrahourapi.config.mongo;
+### Prerequisites
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.mongodb.MongoDatabaseFactory;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
+- Java 11
+- Maven
+- MongoDB
 
-@Configuration
-public class MongoDBConfig {
+### Steps
 
-    @Bean
-    public MongoDatabaseFactory mongoConfigure(){
-        return new SimpleMongoClientDatabaseFactory("mongodb://localhost:27017/extra-hours-management");
-    }
+1. **Clone the repository:**
+    ```bash
+    git clone https://github.com/marcelomartinsdev/fortes-extrahour-api.git
+    ```
+2. **Navigate to the project directory:**
+    ```bash
+    cd fortes-extrahour-api
+    ```
+3. **Build the project using Maven:**
+    ```bash
+    mvn clean install
+    ```
+4. **Run the application:**
+    ```bash
+    mvn spring-boot:run
+    ```
 
-    @Bean
-    public MongoTemplate mongoTemplate(){
-        return new MongoTemplate(mongoConfigure());
-    }
-}
+The application will be accessible at `http://localhost:8080`.
+
+## Usage
+
+Once the API is running, you can interact with it using tools like Postman or cURL. Below are some of the key functionalities provided by the API:
+
+- **User Registration and Login**
+- **Scheduling Overtime**
+- **Viewing and Managing Overtime Records**
+- **Assigning and Managing Employees**
+- **Secure Access to Endpoints via JWT**
+
+## API Endpoints
+
+### Authentication
+
+- `POST /api/auth/login`: Authenticate a user and receive a JWT token.
+- `POST /api/auth/register`: Register a new user.
+
+### Overtime Management
+
+- `POST /api/overtime`: Create a new overtime schedule.
+- `GET /api/overtime`: Retrieve a list of all overtime schedules.
+- `PUT /api/overtime/{id}`: Update an existing overtime schedule.
+- `DELETE /api/overtime/{id}`: Delete an overtime schedule.
+
+### Employee Management
+
+- `POST /api/employees`: Add a new employee.
+- `GET /api/employees`: Retrieve a list of all employees.
+- `PUT /api/employees/{id}`: Update employee details.
+- `DELETE /api/employees/{id}`: Remove an employee.
+
+## Project Structure
+
+The project follows a standard Spring Boot project structure:
+
+```plaintext
+src
+├── main
+│   ├── java
+│   │   └── com.example.fortesextrahourapi
+│   │       ├── config
+│   │       ├── controller
+│   │       ├── domain
+│   │       ├── dto
+│   │       ├── enums
+│   │       ├── exceptions
+│   │       ├── repositories
+│   │       └── service
+│   └── resources
+│       ├── application.properties
+│       └── static
+└── test
+    └── java
+        └── com.example.fortesextrahourapi
 ```
+License
 
-- Adicionado a Annotation @EnableMongoRepositories o arquivo de entrada da aplicação “FortesExtrahourApiApplication.java”
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-```java
-@EnableMongoRepositories
-@SpringBootApplication
-public class FortesExtrahourApiApplication {
-
-	public static void main(String[] args) {
-		SpringApplication.run(FortesExtrahourApiApplication.class, args);
-	}
-
-}
-```
-
-Criando a camada de Domínio
-
-- Criado o domínio Employee (domain.employee)
-- Criado a classe Employee, com todos os campos necessários
-
-```java
-package com.example.fortesextrahourapi.domain;
-
-import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.time.LocalDate;
-
-@Document(collection = "employees")
-@Getter
-@Setter
-@NoArgsConstructor
-public class Employee {
-    @Id
-    private String id;
-    @NotBlank(message = "O nome nao pode estar vazio!")
-    private String nome;
-    private Cargo cargo;
-    @NotBlank(message = "O email nao pode estar vazio!")
-    private String email;
-    @NotBlank(message = "A senha nao pode estar vazia!")
-    @Length(min = 8, message = "A senha deve ter no minimo 8 caracteres!")
-    private String senha; // lembrar de criptografar
-    private String telefone;
-    private boolean ativo;
-    private LocalDate dataDeCadastro;
-}
-```
-
-- Adicionado as Annotations @Getter e @Setter do Lombok para criar os getters e setters dos campos em tempo de execução e para abstrair código
-- Adicionado as Anottations @NoArgsConstructor para criar construtor sem argumentos para a classe Employee
-- Adicionado a Annotation *`@Document*(collection = "employees")` para definir que a classe Employee representará a entidade do domínio employees
-
-**Iniciando configuração da autenticação com Token JWT**
-
-- Criado o Token Service, dentro do package Config, para configurar a criação do Token
-- Criado a função getSubject para capturar o usuário do funcionário para validar o token
-
-```java
-package com.example.fortesextrahourapi.config.tocken;
-
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTCreationException;
-import com.example.fortesextrahourapi.domain.Employee;
-import com.example.fortesextrahourapi.exceptions.CustomTokenCreationException;
-import com.example.fortesextrahourapi.exceptions.CustomTokenValidationException;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
-import java.util.Date;
-
-@Service
-public class TokenService {
-    @Value("${jwt.secret}")
-    private String secret;
-    @Value("${jwt.expiration}")
-    private Long expirationTime;
-    public String generateToken(Employee employee) {
-        try {
-            return JWT.create()
-                    .withIssuer("ExtraHoursAPI")
-                    .withSubject(employee.getNome())
-                    .withClaim("id", employee.getId())
-                    .withExpiresAt(new Date(System.currentTimeMillis() + expirationTime))
-                    .sign(Algorithm.HMAC256(secret));
-        } catch (JWTCreationException e) {
-            throw new CustomTokenCreationException("Falha ao criar o Token!", e);
-        }
-    }
-
-    public String getSubject(String token) {
-        try {
-            if (token == null || token.isEmpty()) {
-                return null;
-            }
-
-            if (isTokenIsEmpty(token)) {
-                return null;
-            }
-
-            return JWT.require(Algorithm.HMAC256("${jwt.secret}"))
-                    .withIssuer("ExtraHoursAPI")
-                    .build().verify(token).getSubject();
-        } catch (JWTCreationException e) {
-            throw new CustomTokenValidationException("Falha ao validar o Token!", e);
-        }
-    }
-}
-```
+Feel free to contribute or reach out if you have any questions. You can view the complete code and documentation on my GitHub Repository.
