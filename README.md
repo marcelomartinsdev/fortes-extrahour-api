@@ -2,6 +2,8 @@
 
 This repository contains the RESTful API developed as part of my Final Graduation Project (TCC) in partnership with Fortes Engenharia. The API is designed to manage overtime work for construction projects, allowing users to schedule overtime, assign employees, choose responsible managers, and log reasons for overtime requests. The project was implemented using Java, Spring Boot, and MongoDB.
 
+You can view the live project online at [https://fortes-khaki.vercel.app/](https://fortes-khaki.vercel.app/).
+
 ## Table of Contents
 
 - [Features](#features)
